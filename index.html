@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Driven Training & Placement Support System</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1d2671, #c33764);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+        }
+
+        .title p {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .login-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 16px;
+            padding: 30px 25px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 24px;
+            border-radius: 30px;
+            background: #ffffff;
+            color: #1d2671;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #1d2671;
+            color: #ffffff;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.85rem;
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="title">
+            <h1>AI Driven Training & Placement Support System</h1>
+            <p>Smart, Secure and Personalized Placement Preparation Platform</p>
+        </div>
+
+        <div class="login-cards">
+            <!-- Student Login -->
+            <div class="card" onclick="location.href='student_login.html'">
+                <div class="icon">🎓</div>
+                <h2>Student Login</h2>
+                <p>Access your training progress, mock interviews, and placement insights.</p>
+                <a class="btn" href="student_login.html">Login as Student</a>
+            </div>
+
+            <!-- TPO Login -->
+            <div class="card" onclick="location.href='tpo_login.html'">
+                <div class="icon">📊</div>
+                <h2>TPO Login</h2>
+                <p>Manage placements, monitor student performance and company drives.</p>
+                <a class="btn" href="tpo_login.html">Login as TPO</a>
+            </div>
+
+            <!-- Faculty Login -->
+            <div class="card" onclick="location.href='faculty_login.html'">
+                <div class="icon">👩‍🏫</div>
+                <h2>Faculty Login</h2>
+                <p>Track student learning, recommend training modules and skills.</p>
+                <a class="btn" href="faculty_login.html">Login as Faculty</a>
+            </div>
+        </div>
+
+        <footer>
+            © 2026 AI Driven Training & Placement Support System | Built for Smart Campuses
+        </footer>
+    </div>
+
+</body>
+</html>

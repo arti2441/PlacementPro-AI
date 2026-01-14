@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TPO Login</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial;
+            color: white;
+        }
+        .box {
+            background: rgba(255,255,255,0.15);
+            padding: 30px;
+            border-radius: 15px;
+            width: 350px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+        }
+        button {
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>TPO Login</h2>
+    <form onsubmit="return validateTPO()">
+        <input type="email" placeholder="Official Email" required>
+        <input type="password" placeholder="Password" required>
+        <input type="text" placeholder="Department / Institute ID" required>
+        <button>Login</button>
+    </form>
+</div>
+
+<script>
+function validateTPO() {
+    alert("TPO login successful (Backend coming soon)");
+    return false;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Faculty Login</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #232526, #414345);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial;
+            color: white;
+        }
+        .login {
+            background: rgba(255,255,255,0.15);
+            padding: 30px;
+            border-radius: 15px;
+            width: 350px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+        }
+        button {
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login">
+    <h2>Faculty Login</h2>
+    <form onsubmit="return validateFaculty()">
+        <input type="email" placeholder="Faculty Email" required>
+        <input type="password" placeholder="Password" required>
+        <input type="text" placeholder="Faculty ID" required>
+        <button>Login</button>
+    </form>
+</div>
+
+<script>
+function validateFaculty() {
+    alert("Faculty login successful (Backend will be added)");
+    return false;
+}
+</script>
+
+</body>
+</html>

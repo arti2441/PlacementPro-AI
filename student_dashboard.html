@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f4f6fb; display: flex; }
+
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1d2671, #c33764);
+            color: white;
+            padding: 25px;
+        }
+        .sidebar h2 { text-align: center; margin-bottom: 30px; }
+        .sidebar a {
+            display: block; color: white; text-decoration: none;
+            padding: 12px; margin: 10px 0; border-radius: 8px;
+        }
+        .sidebar a:hover { background: rgba(255,255,255,0.2); }
+
+        .main { flex: 1; padding: 30px; }
+
+        .header {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 30px;
+        }
+
+        .logout {
+            background: #c33764; color: white;
+            padding: 8px 18px; border-radius: 20px;
+            text-decoration: none;
+        }
+
+        .card {
+            background: white; padding: 20px;
+            border-radius: 15px; margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .progress {
+            height: 10px; background: #ddd;
+            border-radius: 10px; overflow: hidden;
+        }
+        .progress span {
+            display: block; height: 100%;
+            background: linear-gradient(90deg, #1d2671, #c33764);
+        }
+
+        input {
+            width: 100%; padding: 8px;
+            margin: 8px 0 15px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none; border-radius: 20px;
+            background: #1d2671; color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2>🎓 Student Panel</h2>
+    <a href="#">📊 Dashboard</a>
+    <a href="#">🧠 Skill Gap Analysis</a>
+    <a href="#">🎤 AI Mock Interview</a>
+    <a href="#">📄 Resume Analyzer</a>
+    <a href="#">🏢 Placement Drives</a>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+
+    <div class="header">
+        <h1>Welcome, Student 👋</h1>
+        <a class="logout" href="index.html">Logout</a>
+    </div>
+
+    <!-- Skill Input -->
+    <div class="card">
+        <h2>🧠 Enter Your Skills (0–10)</h2>
+
+        <label>Data Structures & Algorithms</label>
+        <input type="number" id="dsa" min="0" max="10">
+
+        <label>Python</label>
+        <input type="number" id="python" min="0" max="10">
+
+        <label>SQL</label>
+        <input type="number" id="sql" min="0" max="10">
+
+        <label>Machine Learning</label>
+        <input type="number" id="ml" min="0" max="10">
+
+        <label>Communication Skills</label>
+        <input type="number" id="comm" min="0" max="10">
+
+        <button onclick="calculateSkill()">Calculate Skill Readiness</button>
+    </div>
+
+    <!-- Skill Readiness -->
+    <div class="card">
+    <h3>Skill Readiness</h3>
+
+    <label>DSA (0–10)</label>
+    <input type="number" id="dsa" min="0" max="10">
+
+    <label>Python (0–10)</label>
+    <input type="number" id="python" min="0" max="10">
+
+    <label>SQL (0–10)</label>
+    <input type="number" id="sql" min="0" max="10">
+
+    <label>Machine Learning (0–10)</label>
+    <input type="number" id="ml" min="0" max="10">
+
+    <label>Communication (0–10)</label>
+    <input type="number" id="comm" min="0" max="10">
+
+    <button onclick="calculateSkill()">Calculate</button>
+
+    <div class="progress" style="margin-top:10px;">
+        <span id="skillBar" style="width: 0%"></span>
+    </div>
+    <p id="skillText">0% Ready</p>
+    </div>
+
+
+
+</div>
+
+<script>
+function calculateSkill() {
+    let skills = [
+        Number(document.getElementById("dsa").value || 0),
+        Number(document.getElementById("python").value || 0),
+        Number(document.getElementById("sql").value || 0),
+        Number(document.getElementById("ml").value || 0),
+        Number(document.getElementById("comm").value || 0)
+    ];
+
+    let total = skills.reduce((a, b) => a + b, 0);
+    let maxScore = skills.length * 10;
+    let percentage = Math.round((total / maxScore) * 100);
+
+    document.getElementById("skillBar").style.width = percentage + "%";
+    document.getElementById("skillText").innerText = percentage + "% Skill Ready";
+}
+</script>
+<script>
+function calculateSkill() {
+    let dsa = Number(document.getElementById("dsa").value || 0);
+    let python = Number(document.getElementById("python").value || 0);
+    let sql = Number(document.getElementById("sql").value || 0);
+    let ml = Number(document.getElementById("ml").value || 0);
+    let comm = Number(document.getElementById("comm").value || 0);
+
+    let total = dsa + python + sql + ml + comm;
+    let maxScore = 50; // 5 skills × 10
+    let percentage = Math.round((total / maxScore) * 100);
+
+    document.getElementById("skillBar").style.width = percentage + "%";
+    document.getElementById("skillText").innerText = percentage + "% Ready";
+}
+</script>
+
+
+
+</body>
+</html>
