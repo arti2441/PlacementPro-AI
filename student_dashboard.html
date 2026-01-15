@@ -2,179 +2,817 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+    <title>Student Dashboard | PlacementPro AI</title>
+    <!-- Same CSS as before, but add these new styles -->
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #f4f6fb; display: flex; }
-
-        .sidebar {
-            width: 260px;
-            height: 100vh;
-            background: linear-gradient(180deg, #1d2671, #c33764);
-            color: white;
+        /* Skills Management Section */
+        .skills-management {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 15px;
             padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .sidebar h2 { text-align: center; margin-bottom: 30px; }
-        .sidebar a {
-            display: block; color: white; text-decoration: none;
-            padding: 12px; margin: 10px 0; border-radius: 8px;
+        
+        .skills-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        .sidebar a:hover { background: rgba(255,255,255,0.2); }
-
-        .main { flex: 1; padding: 30px; }
-
-        .header {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 30px;
+        
+        .skills-form input, .skills-form select {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.7);
+            color: white;
         }
-
-        .logout {
-            background: #c33764; color: white;
-            padding: 8px 18px; border-radius: 20px;
-            text-decoration: none;
-        }
-
-        .card {
-            background: white; padding: 20px;
-            border-radius: 15px; margin-bottom: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .progress {
-            height: 10px; background: #ddd;
-            border-radius: 10px; overflow: hidden;
-        }
-        .progress span {
-            display: block; height: 100%;
-            background: linear-gradient(90deg, #1d2671, #c33764);
-        }
-
-        input {
-            width: 100%; padding: 8px;
-            margin: 8px 0 15px 0;
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none; border-radius: 20px;
-            background: #1d2671; color: white;
+        
+        .skills-form button {
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0 20px;
             cursor: pointer;
+        }
+        
+        .current-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .skill-tag {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .skill-tag .remove-skill {
+            color: #ef4444;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        /* Mock Interview Section */
+        .interview-section {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .interview-question {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 10px;
+        }
+        
+        .interview-answer {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.7);
+            color: white;
+            margin-top: 10px;
+        }
+        
+        /* Real-time Skill Gap Visualization */
+        .skill-gap-visualization {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 8px;
+        }
+        
+        .skill-gap-bar {
+            flex: 1;
+            height: 20px;
+            background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+            border-radius: 10px;
+            margin: 0 15px;
+            position: relative;
+        }
+        
+        .skill-gap-marker {
+            position: absolute;
+            top: -5px;
+            width: 10px;
+            height: 30px;
+            background: white;
+            border-radius: 5px;
+        }
+        
+        /* Loading States */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-
-<!-- Sidebar -->
-<div class="sidebar">
-    <h2>🎓 Student Panel</h2>
-    <a href="#">📊 Dashboard</a>
-    <a href="#">🧠 Skill Gap Analysis</a>
-    <a href="#">🎤 AI Mock Interview</a>
-    <a href="#">📄 Resume Analyzer</a>
-    <a href="#">🏢 Placement Drives</a>
-</div>
-
-<!-- Main Content -->
-<div class="main">
-
-    <div class="header">
-        <h1>Welcome, Student 👋</h1>
-        <a class="logout" href="index.html">Logout</a>
+    <div class="dashboard-container">
+        <!-- Same sidebar as before -->
+        
+        <main class="main-content">
+            <!-- Same top bar -->
+            
+            <!-- Skills Management Card -->
+            <div class="skills-management">
+                <h3>🎯 Manage Your Skills</h3>
+                <p style="color: #94a3b8; margin-bottom: 20px;">Add your skills with proficiency levels (0-100%)</p>
+                
+                <div class="skills-form">
+                    <input type="text" id="skillName" placeholder="Skill name (e.g., Python, ML, SQL)">
+                    <input type="number" id="skillProficiency" min="0" max="100" placeholder="Proficiency %">
+                    <button id="addSkillBtn">Add Skill</button>
+                </div>
+                
+                <div class="current-skills" id="currentSkills">
+                    <!-- Skills will be loaded here -->
+                </div>
+                
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button class="btn" id="saveSkillsBtn" style="background: linear-gradient(90deg, #10b981, #3b82f6);">
+                        <span class="loading hidden" id="saveSkillsLoading"></span>
+                        Save Skills & Update Analysis
+                    </button>
+                    <button class="btn btn-secondary" id="clearSkillsBtn">
+                        Clear All Skills
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Real-time Skill Gap Analysis -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value" id="placementScoreReal">0%</div>
+                            <div class="stat-title">ML-Based Readiness</div>
+                        </div>
+                        <div class="stat-icon">🤖</div>
+                    </div>
+                    <div id="readinessDetails" style="font-size: 0.9rem; color: #94a3b8; margin-top: 10px;">
+                        Add skills to see your placement readiness
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value" id="skillGapCount">0</div>
+                            <div class="stat-title">Skill Gaps Found</div>
+                        </div>
+                        <div class="stat-icon">🎯</div>
+                    </div>
+                    <div id="gapDetails" style="font-size: 0.9rem; color: #94a3b8; margin-top: 10px;">
+                        ML analysis will identify gaps
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value" id="interviewScoreReal">0</div>
+                            <div class="stat-title">Avg Interview Score</div>
+                        </div>
+                        <div class="stat-icon">📝</div>
+                    </div>
+                    <div id="interviewDetails" style="font-size: 0.9rem; color: #94a3b8; margin-top: 10px;">
+                        Take mock interviews to get score
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Personalized Mock Interview Section -->
+            <div class="interview-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>🤖 AI-Powered Mock Interview</h3>
+                    <button class="btn" id="startInterviewBtn">
+                        <span class="loading hidden" id="interviewLoading"></span>
+                        Start New Interview
+                    </button>
+                </div>
+                
+                <div id="interviewContainer" class="hidden">
+                    <div id="interviewQuestions">
+                        <!-- Questions will be loaded here -->
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button class="btn" id="submitInterviewBtn">Submit Answers</button>
+                    </div>
+                </div>
+                
+                <div id="interviewResult" class="hidden">
+                    <!-- Interview results will be shown here -->
+                </div>
+            </div>
+            
+            <!-- Personalized Recommendations (AI Generated) -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>💡 AI-Powered Recommendations</h3>
+                </div>
+                <div id="aiRecommendations">
+                    <!-- Recommendations from ML model -->
+                    <p style="color: #94a3b8; text-align: center; padding: 40px;">
+                        Add your skills and take mock interviews to get personalized recommendations
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Real Skill Gap Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>📊 Real-time Skill Gap Analysis</h3>
+                    <button class="btn btn-secondary" id="refreshAnalysisBtn">
+                        <span class="loading hidden" id="analysisLoading"></span>
+                        Refresh Analysis
+                    </button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="realSkillGapChart"></canvas>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <!-- Skill Input -->
-    <div class="card">
-        <h2>🧠 Enter Your Skills (0–10)</h2>
-
-        <label>Data Structures & Algorithms</label>
-        <input type="number" id="dsa" min="0" max="10">
-
-        <label>Python</label>
-        <input type="number" id="python" min="0" max="10">
-
-        <label>SQL</label>
-        <input type="number" id="sql" min="0" max="10">
-
-        <label>Machine Learning</label>
-        <input type="number" id="ml" min="0" max="10">
-
-        <label>Communication Skills</label>
-        <input type="number" id="comm" min="0" max="10">
-
-        <button onclick="calculateSkill()">Calculate Skill Readiness</button>
-    </div>
-
-    <!-- Skill Readiness -->
-    <div class="card">
-    <h3>Skill Readiness</h3>
-
-    <label>DSA (0–10)</label>
-    <input type="number" id="dsa" min="0" max="10">
-
-    <label>Python (0–10)</label>
-    <input type="number" id="python" min="0" max="10">
-
-    <label>SQL (0–10)</label>
-    <input type="number" id="sql" min="0" max="10">
-
-    <label>Machine Learning (0–10)</label>
-    <input type="number" id="ml" min="0" max="10">
-
-    <label>Communication (0–10)</label>
-    <input type="number" id="comm" min="0" max="10">
-
-    <button onclick="calculateSkill()">Calculate</button>
-
-    <div class="progress" style="margin-top:10px;">
-        <span id="skillBar" style="width: 0%"></span>
-    </div>
-    <p id="skillText">0% Ready</p>
-    </div>
-
-
-
-</div>
-
-<script>
-function calculateSkill() {
-    let skills = [
-        Number(document.getElementById("dsa").value || 0),
-        Number(document.getElementById("python").value || 0),
-        Number(document.getElementById("sql").value || 0),
-        Number(document.getElementById("ml").value || 0),
-        Number(document.getElementById("comm").value || 0)
-    ];
-
-    let total = skills.reduce((a, b) => a + b, 0);
-    let maxScore = skills.length * 10;
-    let percentage = Math.round((total / maxScore) * 100);
-
-    document.getElementById("skillBar").style.width = percentage + "%";
-    document.getElementById("skillText").innerText = percentage + "% Skill Ready";
-}
-</script>
-<script>
-function calculateSkill() {
-    let dsa = Number(document.getElementById("dsa").value || 0);
-    let python = Number(document.getElementById("python").value || 0);
-    let sql = Number(document.getElementById("sql").value || 0);
-    let ml = Number(document.getElementById("ml").value || 0);
-    let comm = Number(document.getElementById("comm").value || 0);
-
-    let total = dsa + python + sql + ml + comm;
-    let maxScore = 50; // 5 skills × 10
-    let percentage = Math.round((total / maxScore) * 100);
-
-    document.getElementById("skillBar").style.width = percentage + "%";
-    document.getElementById("skillText").innerText = percentage + "% Ready";
-}
-</script>
-
-
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Global variables
+        let currentSkills = [];
+        let currentInterview = null;
+        let skillGapChart = null;
+        
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            
+            if (!token || !user) {
+                window.location.href = 'student_login.html';
+                return null;
+            }
+            
+            return JSON.parse(user);
+        }
+        
+        // Load student data from backend
+        async function loadDashboardData() {
+            const user = checkAuth();
+            if (!user) return;
+            
+            try {
+                // Fetch complete dashboard data
+                const response = await fetch('http://localhost:5000/api/student/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    updateDashboardWithRealData(data);
+                } else {
+                    throw new Error('Failed to load dashboard');
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showMessage('Failed to load dashboard data. Using local data.', 'error');
+            }
+        }
+        
+        // Update dashboard with real data
+        function updateDashboardWithRealData(data) {
+            // Update user info
+            document.getElementById('userName').textContent = data.user.full_name;
+            document.getElementById('userEmail').textContent = data.user.email;
+            document.getElementById('fullName').textContent = data.user.full_name;
+            
+            // Update profile info
+            if (data.profile) {
+                document.getElementById('university').textContent = data.profile.university || 'Not set';
+                document.getElementById('batch').textContent = data.profile.batch || 'Not set';
+                document.getElementById('cgpa').textContent = data.profile.cgpa ? `${data.profile.cgpa}/10.0` : 'Not set';
+                document.getElementById('targetRole').textContent = data.profile.target_role || 'Not set';
+            }
+            
+            // Update stats
+            document.getElementById('placementScoreReal').textContent = `${data.placement_score}%`;
+            document.getElementById('skillGapCount').textContent = data.skill_gaps.length;
+            document.getElementById('interviewScoreReal').textContent = data.stats.average_score.toFixed(1);
+            
+            // Update skills list
+            currentSkills = data.skills;
+            updateSkillsDisplay();
+            
+            // Update skill gap chart
+            updateRealSkillGapChart(data.skill_gaps);
+            
+            // Update recommendations
+            updateRecommendations(data.recommendations);
+            
+            // Update readiness details
+            document.getElementById('readinessDetails').innerHTML = `
+                Based on ${data.skills.length} skills and ${data.stats.total_interviews} interviews
+            `;
+            
+            document.getElementById('gapDetails').innerHTML = `
+                ${data.skill_gaps.length} gaps found for ${data.profile?.target_role || 'Data Scientist'} role
+            `;
+        }
+        
+        // Update skills display
+        function updateSkillsDisplay() {
+            const skillsContainer = document.getElementById('currentSkills');
+            skillsContainer.innerHTML = '';
+            
+            currentSkills.forEach((skill, index) => {
+                const skillTag = document.createElement('div');
+                skillTag.className = 'skill-tag';
+                skillTag.innerHTML = `
+                    <span>${skill.skill_name}</span>
+                    <span style="color: #60a5fa;">${skill.proficiency}%</span>
+                    <span class="remove-skill" data-index="${index}">×</span>
+                `;
+                skillsContainer.appendChild(skillTag);
+            });
+            
+            // Add remove skill listeners
+            document.querySelectorAll('.remove-skill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    currentSkills.splice(index, 1);
+                    updateSkillsDisplay();
+                });
+            });
+        }
+        
+        // Add new skill
+        document.getElementById('addSkillBtn').addEventListener('click', function() {
+            const name = document.getElementById('skillName').value.trim();
+            const proficiency = parseInt(document.getElementById('skillProficiency').value);
+            
+            if (!name || isNaN(proficiency) || proficiency < 0 || proficiency > 100) {
+                showMessage('Please enter valid skill name and proficiency (0-100)', 'error');
+                return;
+            }
+            
+            currentSkills.push({
+                skill_name: name,
+                proficiency: proficiency,
+                category: 'technical'
+            });
+            
+            updateSkillsDisplay();
+            document.getElementById('skillName').value = '';
+            document.getElementById('skillProficiency').value = '';
+        });
+        
+        // Save skills to backend
+        document.getElementById('saveSkillsBtn').addEventListener('click', async function() {
+            const btn = this;
+            const loading = document.getElementById('saveSkillsLoading');
+            
+            btn.disabled = true;
+            loading.classList.remove('hidden');
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/student/skills', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ skills: currentSkills })
+                });
+                
+                if (response.ok) {
+                    showMessage('Skills saved successfully! Updating analysis...', 'success');
+                    
+                    // Refresh dashboard data
+                    await loadDashboardData();
+                    
+                    // Refresh skill gap analysis
+                    await refreshSkillAnalysis();
+                    
+                } else {
+                    throw new Error('Failed to save skills');
+                }
+            } catch (error) {
+                console.error('Error saving skills:', error);
+                showMessage('Failed to save skills', 'error');
+            } finally {
+                btn.disabled = false;
+                loading.classList.add('hidden');
+            }
+        });
+        
+        // Clear all skills
+        document.getElementById('clearSkillsBtn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear all skills?')) {
+                currentSkills = [];
+                updateSkillsDisplay();
+                showMessage('All skills cleared', 'info');
+            }
+        });
+        
+        // Start mock interview
+        document.getElementById('startInterviewBtn').addEventListener('click', async function() {
+            const btn = this;
+            const loading = document.getElementById('interviewLoading');
+            
+            btn.disabled = true;
+            loading.classList.remove('hidden');
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/student/interview/start', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    currentInterview = data;
+                    showInterviewQuestions(data.questions);
+                    showMessage('Interview started! Questions generated based on your skill gaps.', 'success');
+                } else {
+                    throw new Error('Failed to start interview');
+                }
+            } catch (error) {
+                console.error('Error starting interview:', error);
+                showMessage('Failed to start interview. Make sure you have skills added.', 'error');
+            } finally {
+                btn.disabled = false;
+                loading.classList.add('hidden');
+            }
+        });
+        
+        // Show interview questions
+        function showInterviewQuestions(questions) {
+            const container = document.getElementById('interviewContainer');
+            const questionsDiv = document.getElementById('interviewQuestions');
+            
+            questionsDiv.innerHTML = '';
+            
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'interview-question';
+                questionDiv.innerHTML = `
+                    <h4 style="margin-bottom: 10px;">Question ${index + 1}</h4>
+                    <p>${question}</p>
+                    <textarea class="interview-answer" data-index="${index}" 
+                              placeholder="Type your answer here..."></textarea>
+                `;
+                questionsDiv.appendChild(questionDiv);
+            });
+            
+            container.classList.remove('hidden');
+        }
+        
+        // Submit interview answers
+        document.getElementById('submitInterviewBtn').addEventListener('click', async function() {
+            const answers = [];
+            document.querySelectorAll('.interview-answer').forEach(textarea => {
+                answers.push(textarea.value.trim());
+            });
+            
+            if (answers.some(answer => !answer)) {
+                showMessage('Please answer all questions before submitting', 'error');
+                return;
+            }
+            
+            this.disabled = true;
+            this.textContent = 'Evaluating...';
+            
+            try {
+                const response = await fetch(`http://localhost:5000/api/student/interview/${currentInterview.interview_id}/submit`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ answers: answers })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showInterviewResult(data);
+                } else {
+                    throw new Error('Failed to submit interview');
+                }
+            } catch (error) {
+                console.error('Error submitting interview:', error);
+                showMessage('Failed to submit interview', 'error');
+            } finally {
+                this.disabled = false;
+                this.textContent = 'Submit Answers';
+            }
+        });
+        
+        // Show interview results
+        function showInterviewResult(data) {
+            const resultDiv = document.getElementById('interviewResult');
+            const container = document.getElementById('interviewContainer');
+            
+            container.classList.add('hidden');
+            
+            resultDiv.innerHTML = `
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); 
+                           padding: 20px; border-radius: 10px; margin-top: 20px;">
+                    <h3 style="color: #10b981;">🎯 Interview Results</h3>
+                    <div style="font-size: 2rem; font-weight: bold; margin: 20px 0; text-align: center;">
+                        Score: ${data.score}/100
+                    </div>
+                    <p>${data.feedback}</p>
+                    
+                    <div style="margin-top: 20px;">
+                        <h4>Detailed Feedback:</h4>
+                        ${data.evaluations.map((e, i) => `
+                            <div style="margin: 15px 0; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                                <strong>Q${i+1}:</strong> ${e.question.substring(0, 100)}...
+                                <div style="margin-top: 10px;">
+                                    <strong>Score:</strong> ${e.evaluation.score}/100<br>
+                                    <strong>Feedback:</strong> ${e.evaluation.feedback}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            resultDiv.classList.remove('hidden');
+            
+            // Refresh dashboard to update stats
+            setTimeout(() => loadDashboardData(), 1000);
+        }
+        
+        // Update real skill gap chart
+        function updateRealSkillGapChart(skillGaps) {
+            const ctx = document.getElementById('realSkillGapChart').getContext('2d');
+            
+            // Destroy existing chart
+            if (skillGapChart) {
+                skillGapChart.destroy();
+            }
+            
+            if (!skillGaps || skillGaps.length === 0) {
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                ctx.fillStyle = '#94a3b8';
+                ctx.textAlign = 'center';
+                ctx.fillText('Add skills to see gap analysis', ctx.canvas.width/2, ctx.canvas.height/2);
+                return;
+            }
+            
+            const labels = skillGaps.map(gap => gap.skill);
+            const studentLevels = skillGaps.map(gap => gap.student_level);
+            const industryLevels = skillGaps.map(gap => gap.industry_standard);
+            const gaps = skillGaps.map(gap => gap.gap);
+            
+            // Colors based on gap size
+            const backgroundColors = gaps.map(gap => 
+                gap > 30 ? 'rgba(239, 68, 68, 0.8)' : 
+                gap > 15 ? 'rgba(245, 158, 11, 0.8)' : 
+                'rgba(59, 130, 246, 0.8)'
+            );
+            
+            skillGapChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Your Level',
+                            data: studentLevels,
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Industry Standard',
+                            data: industryLevels,
+                            backgroundColor: 'rgba(148, 163, 184, 0.5)',
+                            borderColor: 'rgba(148, 163, 184, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Gap',
+                            data: gaps,
+                            backgroundColor: backgroundColors,
+                            borderColor: backgroundColors.map(color => color.replace('0.8', '1')),
+                            borderWidth: 1,
+                            type: 'line',
+                            fill: false,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { color: '#cbd5e1' }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.y;
+                                    if (context.datasetIndex === 2) {
+                                        return `${label}: ${value} points gap`;
+                                    }
+                                    return `${label}: ${value}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { 
+                                color: '#94a3b8',
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update AI recommendations
+        function updateRecommendations(recommendations) {
+            const container = document.getElementById('aiRecommendations');
+            
+            if (!recommendations || recommendations.length === 0) {
+                container.innerHTML = `
+                    <p style="color: #94a3b8; text-align: center; padding: 40px;">
+                        Add your skills and take mock interviews to get personalized recommendations
+                    </p>
+                `;
+                return;
+            }
+            
+            container.innerHTML = recommendations.map(rec => `
+                <div style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; align-items: start; gap: 10px;">
+                        <div style="width: 8px; height: 8px; 
+                                   background: ${rec.priority === 'High' ? '#ef4444' : rec.priority === 'Medium' ? '#f59e0b' : '#10b981'}; 
+                                   border-radius: 50%; margin-top: 8px;"></div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500; margin-bottom: 5px;">
+                                ${rec.type === 'course_recommendation' ? '📚 ' : '💡 '}${rec.recommendation}
+                            </div>
+                            ${rec.skill ? `
+                                <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+                                    <span style="font-size: 0.9rem; color: #94a3b8;">
+                                        Skill: ${rec.skill} (${rec.gap} point gap)
+                                    </span>
+                                    ${rec.resource_url ? `
+                                        <a href="${rec.resource_url}" target="_blank" style="color: #60a5fa; font-size: 0.9rem;">
+                                            View Resource →
+                                        </a>
+                                    ` : ''}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Refresh skill analysis
+        document.getElementById('refreshAnalysisBtn').addEventListener('click', async function() {
+            await refreshSkillAnalysis();
+        });
+        
+        async function refreshSkillAnalysis() {
+            const btn = document.getElementById('refreshAnalysisBtn');
+            const loading = document.getElementById('analysisLoading');
+            
+            btn.disabled = true;
+            loading.classList.remove('hidden');
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/student/skills', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    updateRealSkillGapChart(data.skill_gaps);
+                    updateRecommendations(data.recommendations);
+                    showMessage('Analysis refreshed successfully!', 'success');
+                } else {
+                    throw new Error('Failed to refresh analysis');
+                }
+            } catch (error) {
+                console.error('Error refreshing analysis:', error);
+                showMessage('Failed to refresh analysis', 'error');
+            } finally {
+                btn.disabled = false;
+                loading.classList.add('hidden');
+            }
+        }
+        
+        // Helper function to show messages
+        function showMessage(message, type = 'info') {
+            const colors = {
+                success: '#10b981',
+                error: '#ef4444',
+                info: '#3b82f6',
+                warning: '#f59e0b'
+            };
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${colors[type]};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            messageDiv.textContent = message;
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => messageDiv.remove(), 300);
+            }, 3000);
+        }
+        
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = checkAuth();
+            if (user) {
+                loadDashboardData();
+                updateCurrentDate();
+                setupLogout();
+            }
+            
+            // Add CSS for animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+        
+        // Keep existing helper functions (updateCurrentDate, setupLogout, etc.)
+    </script>
 </body>
 </html>
